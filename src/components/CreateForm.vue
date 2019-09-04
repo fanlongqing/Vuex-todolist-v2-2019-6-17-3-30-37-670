@@ -15,12 +15,15 @@
         },
         methods: {
             handleCreateTodo: function () {
-                this.$store.commit("handleCreateTodo",this.inputtingItem);
-                this.inputtingItem='';
+               this.$store.dispatch("postTodos",this.inputtingItem);
+                this.$store.dispatch("putTodos");
+               //this.$store.commit("handleCreateTodo",this.inputtingItem);
+               this.inputtingItem='';
             }
         }
     }
 </script>
+
 <style scoped>
 
 </style>

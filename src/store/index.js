@@ -4,9 +4,9 @@ export default {
     strict: true,
     state: {
         todoList: [
-            {status: 'completed', content: '吃饭'},
-            {status: 'completed', content: '睡觉'},
-            {status: 'completed', content: '打豆豆'}
+            { status: 'completed', content: '吃饭' },
+            { status: 'completed', content: '睡觉' },
+            { status: 'completed', content: '打豆豆' }
         ],
         currentFilter: 'all'
     },
@@ -22,35 +22,61 @@ export default {
         }
     },
     mutations: {
-        handleCreateTodo:function(state,inputtingItem){
+        handleCreateTodo: function (state, inputtingItem) {
             state.todoList.push(
                 {
-                    state:'active',
-                    content:inputtingItem
+                    status: 'active',
+                    content: inputtingItem
 
-        })
+                })
+        },
+        handleToggleActive: function (state, index) {
+            state.todoList[index].status = state.todoList[index].status === 'completed' ? 'active' : 'completed';
+        },
+        handleFilter:function(state,currentFilter){
+            state.currentFilter = currentFilter;
+        },
+        initTodos:function(state,todos){
+            state.todoList = todos;
+        }
     },
-    handleToggleActive:function(state,index){
-        state.todoList[index].status = this.$store.state.todoList[index].status === 'completed' ? 'active' : 'completed';
-    },
-    handleFilter:function(state,currentFilter){
-        state.currentFilter=currentFilter;
-    },
-    initTodos:function(state,todos){
-        state.todoList=todos;
-    }
-},
     actions:{
         fetchTodos:function(context){
-            const url="http://5b4dcb2aec112500143a2311.mockapi.io/api/todos";
-            axios.get(url).then(function (response){
-                context.commit('initTodos',response.data);
-               
-            }).catch(function(error)
-            {
-                console.log(error,response);
-            })
-
+            console.log(context);
+            const url = "http://5b4dcb2aec112500143a2311.mockapi.io/api/todos";
+            axios.get(url).then(function(response){
+                console.log(response.data);
+                context.commit("initTodos",response.data);
+            }).catch(function (error) {
+                console.log(error.response);
+                console.log(error);
+                });
+            },
+        postTodos:function(context,inputtingItem){
+            const url = "http://5b4dcb2aec112500143a2311.mockapi.io/api/todos";
+            axios.post(url,{
+                content:inputtingItem,
+                status:'active'
+            }).then(function (response){
+                if(response.status==201)
+                context.dispatch('fetchTodos');
+            }).catch(function (error) {
+                console.log(error.response);
+                console.log(error);
+                });
+        },
+        putTodos:function(context){
+            const url = "http://5b4dcb2aec112500143a2311.mockapi.io/api/todos";
+            axios.put(url,{
+                id:114,
+                content:"迷失的小羔羊",
+                status:'completed'
+            }).then(function(response){
+                if(response.status==200) context.dispatch('fetchTodos');
+            }).catch(function(error){
+                console.log(error.response);
+                console.log(error);
+            });  
         }
     }
 }

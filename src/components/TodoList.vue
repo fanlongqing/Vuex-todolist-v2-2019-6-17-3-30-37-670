@@ -22,8 +22,7 @@
         },
         methods: {
             handleToggleActive: function (index) {
-                this.$store.commit("handleToggleActive",index);
-               
+               this.$store.commit("handleToggleActive",index);
             }
         }
     }

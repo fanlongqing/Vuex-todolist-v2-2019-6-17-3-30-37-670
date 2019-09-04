@@ -18,7 +18,7 @@
         },
         methods: {
             handleFilter: function (currentFilter) {
-                this.$store.state.currentFilter = currentFilter;
+               this.$store.commit("handleFilter",currentFilter);
             }
         }
     }
